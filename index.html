@@ -54,21 +54,91 @@
           <section>
             <h2>2. React Fiber의 <br />두 가지 개념</h2>
           </section>
-          <section></section>
+          <section>
+            <h3>1) Fiber Architecture</h3>
+            <p class="fragment fade-in">
+              리액트가 컴포넌트를 렌더링하고 UI를 업데이트하는 방식을 완전히
+              새롭게 디자인한 아키텍처
+            </p>
+          </section>
+          <section>
+            <h3>2) Fiber Node</h3>
+            <p class="fragment fade-in">
+              리액트 트리 구조의 각 노드를 나타내는 객체
+            </p>
+          </section>
         </section>
 
         <section>
           <section>
             <h2>3. React Fiber Node란?</h2>
           </section>
-          <section></section>
+          <section>
+            <h2>React Fiber Node</h2>
+            <p>: 하나의 작업 단위</p>
+            <ul>
+              <li class="fragment fade-in">
+                하나의 컴포넌트에는 하나의 파이버 노드가 존재
+              </li>
+              <li class="fragment fade-in">
+                리액트 내부에서 관리하는 가상 돔의 노드 객체
+              </li>
+              <li class="fragment fade-in">리액트 요소를 확장</li>
+            </ul>
+          </section>
         </section>
 
         <section>
           <section>
             <h2>4. React Fiber Node의 내부 구조</h2>
           </section>
-          <section></section>
+          <section>
+            <a
+              href="https://github.com/facebook/react/blob/main/packages/react-reconciler/src/ReactFiber.js"
+              target="_blank"
+              style="font-size: 20px"
+              >react/packages/react-reconciler/ReactFiber.js</a
+            >
+            <pre style="height: 680px; font-size: 16px">
+							<code data-trim data-noescape  class="language-javascript" data-line-numbers="|11-13|11-13,21|11-13,21,22|11-13,21,22,32|11-13,21,22,32,35">
+							function FiberNode(..){
+								// Instance
+								this.tag = tag;
+								this.key = key;
+								this.elementType = null;
+								this.type = null;
+								this.stateNode = null;
+
+								// Fiber
+								this.return = null;
+								this.child = null;
+								this.sibling = null;
+								this.index = 0;
+
+								this.ref = null;
+								this.refCleanup = null;
+
+								this.pendingProps = pendingProps;
+								this.memoizedProps = null;
+								this.updateQueue = null;
+								this.memoizedState = null;
+								this.dependencies = null;
+
+								this.mode = mode;
+
+								// Effects
+								this.flags = NoFlags;
+								this.subtreeFlags = NoFlags;
+								this.deletions = null;
+
+								this.lanes = NoLanes;
+								this.childLanes = NoLanes;
+
+								this.alternate = null;
+							}
+								</code>
+							</pre>
+          </section>
         </section>
 
         <section>
@@ -84,6 +154,8 @@
           </section>
           <section></section>
         </section>
+
+        <section>감사합니다.</section>
       </div>
     </div>
 
