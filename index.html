@@ -12,7 +12,7 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="stylesheet" href="dist/reset.css" />
     <link rel="stylesheet" href="dist/reveal.css" />
-    <link rel="stylesheet" href="dist/theme/simple.css" />
+    <link rel="stylesheet" href="dist/theme/white-contrast.css" />
 
     <link rel="stylesheet" href="plugin/highlight/monokai.css" />
   </head>
@@ -25,7 +25,7 @@
         </section>
 
         <section class="r-stack">
-          <h3>
+          <h3 style="margin-top: -40px">
             리액트를 사용하며 <br />
             이런 궁금증 가져보신 적 있으신가요?
           </h3>
@@ -215,7 +215,7 @@ export type Fiber = {
   refCleanup: null | (() => void);
 
   pendingProps: any;
-  memoizedProps: any;
+  memoizedProps: any;감
   updateQueue: mixed;
   memoizedState: any;
   dependencies: Dependencies | null;
@@ -239,7 +239,8 @@ export type Fiber = {
             <h2>3.1. updateQueue</h2>
 
             <div class="fragment fade-in-then-semi-out">
-              Q1) setState를 호출했는데 <b>왜</b> 상태에 바로 반영이<br />
+              Q1) setState를 호출했는데
+              <b>왜</b> 상태에 바로 반영이<br />
               바로 안되지?
               <pre>
                 <code data-trim class="language-typescript">
@@ -370,7 +371,7 @@ export type Fiber = {
             <h2>4. 마무리</h2>
           </section>
           <section>
-            <h4>
+            <h4 style="margin-top: -60px">
               그래 피터, React Fiber가 리액트의 내부 구조인 건 알겠어.
               <br />이게 내가 개발하는데 도움이 될까?
             </h4>
@@ -408,8 +409,8 @@ export type Fiber = {
             </ul>
           </section>
 
-          <section>
-            <h2>정리</h2>
+          <section data-auto-animate>
+            <h2 data-id="title-정리">정리</h2>
 
             <div>
               <p class="fragment fade-in">
@@ -430,8 +431,10 @@ export type Fiber = {
             </div>
           </section>
 
-          <section>
-            <p class="fragment fade-in">
+          <section data-auto-animate>
+            <h2 data-id="title-정리">정리</h2>
+
+            <p>
               "리액트 파이버란 리액트의 재조정 엔진(Fiber Architecture)이자
               컴포넌트의 모든 상태를 관리하는 자바스크립트 객체(Fiber
               Node)이다."
@@ -439,7 +442,7 @@ export type Fiber = {
           </section>
         </section>
 
-        <section>
+        <section data-transition="convex">
           <p class="r-fit-text">감사합니다🙇‍♂️</p>
         </section>
 
