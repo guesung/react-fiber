@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" href="dist/reset.css" />
     <link rel="stylesheet" href="dist/reveal.css" />
-    <link rel="stylesheet" href="dist/theme/night.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" />
 
     <link rel="stylesheet" href="plugin/highlight/monokai.css" />
   </head>
@@ -20,7 +20,7 @@
       <div class="slides">
         <section data-transition="zoom">
           <h2 class="r-fit-text">React Fiber</h2>
-          <h4>우아한테크코스 7기 프론트엔드 피터</h4>
+          <h4>우아한테크코스 7기 피터</h4>
         </section>
 
         <section class="r-stack">
@@ -28,74 +28,68 @@
             리액트를 사용하며 <br />
             이런 궁금증 가져보신 적 있으신가요?
           </h3>
-          <div class="fragment fade-in-then-semi-out">
-            의문 1) setState를 호출했는데 <b>왜</b> 바로 상태에 반영이<br />
-            바로 안되지?
-            <pre>
-                <code data-trim class="language-typescript">
-                  const [count,setCount] = useCount(0);
-                  
-                  const handleClick = () => {
-                    setCount(count+1); 
-                    console.log(count); // 0
-                    setCount(count+1); 
-                    console.log(count); // 0
-                  }
-                </code>
-              </pre>
+          <div>
+            <p class="fragment fade-in">
+              Q1) setState를 실행했을 때 상태값이 <b>왜</b> 바로 바뀌지 않지?
+            </p>
+            <pre class="fragment fade-in">
+              <code data-trim class="language-typescript" data-line-numbers="">
+                const [count,setCount] = useState(0);
+                
+                const handleClick = () => {
+                  setCount(count+1); 
+                  console.log(count); // 0
+                  setCount(count+1); 
+                  console.log(count); //  ㄹㄹ
+                }
+              </code>
+            </pre>
           </div>
-          <div class="fragment fade-in-then-semi-out">
-            의문 2) 훅을 if문이나 함수 안에서 <b>왜</b> 호출하면 안되지?
-            <pre>
-                <code data-trim class="language-typescript">
+          <div>
+            <p class="fragment fade-in">
+              Q2) 훅을 if문이나 함수 안에서 호출하면 <b>왜</b> 안되지?
+            </p>
+            <pre class="fragment fade-in"> 
+                <code data-trim class="language-typescript" data-line-numbers="">
                   if(condition){
-                    const [state,setState] = useState(0);
+                    const [state,setState] = useState(0); 
+                    // [Error]
+                    // React has detected a change in the order of Hooks called.
+                    // This will lead to bugs and errors if not fixed.
                   }
                 </code>
               </pre>
           </div>
-          <div class="fragment fade-in-then-semi-out">
-            의문 3) props로 전달한 값이나 상태값은<br />
-            <b>어디서</b> 관리를 하는 걸까?
+          <div>
+            <p class="fragment fade-left">=> React Fiber</p>
           </div>
         </section>
 
         <section>
-          <h2>=> React Fiber</h2>
-          <p class="fragment fade-in">: 리액트의 내부 동작 원리</p>
-        </section>
+          <h2>이번 시간의 목표</h2>
+          <ol>
+            <li class="fragment fade-in">
+              앞선 궁금증에 대한 답을 찾아보자.
+              <div class="fragment fade-in-then-semi-out">
+                <p>
+                  Q1) setState를 실행하면 상태값이 <b>왜</b> 바로 바뀌지 않지?
+                </p>
+                <p>Q2) 훅을 if문이나 함수 안에서 호출하면 <b>왜</b> 안되지?</p>
+              </div>
+            </li>
 
-        <section>
-          <h2>
-            Q) 내부 동작 원리를 <span class="fragment highlight-red">왜</span>
-            <br />
-            알아야하지?
-          </h2>
-          <p>내부 동작 원리를 몰라도 개발하는데 지장이 없지 않을까?</p>
-          <ul>
             <li class="fragment fade-in">
-              프론트엔드 개발의 전체적인 그림을 그리기 위해서
+              '리액트 파이버란 ____이다.'에 대한 답을 찾아보자.
             </li>
-            <li class="fragment fade-in">
-              리액트의 핵심 기술(RSC, Suspense, 동시성)을 빠르고 쉽게 이해하기
-              위해서
-            </li>
-            <li class="fragment fade-in">
-              하지만 개발을 하는데 필요한 지식을 학습하는 게 우선
-            </li>
-            <li class="fragment fade-in">
-              이번 발표에서는 '리액트 내부에는 이런게 있구나', 그리고 '이런
-              개념과 관련이 있구나' 정도로만 이해하면 충분
-            </li>
-          </ul>
+          </ol>
         </section>
 
         <section>
           <h2>목차</h2>
           <ol>
-            <li>React Fiber의 등장 배경</li>
-            <li>React Fiber란?</li>
-            <li>React Fiber의 내부 구조</li>
+            <li class="fragment fade-left">React Fiber의 등장 배경</li>
+            <li class="fragment fade-left">React Fiber란?</li>
+            <li class="fragment fade-left">React Fiber의 주요 속성</li>
           </ol>
         </section>
 
@@ -104,60 +98,94 @@
             <h2>1. React Fiber의 등장 배경</h2>
           </section>
           <section>
+            <h2>재조정자</h2>
+            <p>
+              : 리액트에서 컴포넌트의 렌더링 이전 상태와 새로운
+              <span class="fragment highlight-red">상태를 비교</span>하여 실제
+              DOM에 어떤
+              <span class="fragment highlight-red">변경사항을 적용</span>할지
+              결정하고 관리하는 핵심 엔진
+            </p>
+          </section>
+
+          <section>
             <h3>React16 이전 : 스택 재조정자</h3>
             <div class="fragment fade-in-then-semi-out">
-              <p>: 렌더링 작업을 순차적으로 처리</p>
-              <img src="./images/stack.png" />
+              <div>
+                <ul>
+                  <li>렌더링 작업을 순차적으로 처리</li>
+                </ul>
+              </div>
             </div>
             <p class="fragment fade-in">단점</p>
             <ol>
               <li class="fragment fade-in">중간에 작업을 중단할 수 없다.</li>
               <li class="fragment fade-in">순서를 변경할 수 없다.</li>
             </ol>
-            <p class="fragment fade-in">=> Fiber 등장</p>
+            <p class="fragment fade-left">=> Fiber 재조정자</p>
+          </section>
+
+          <section>
+            <h3>React16.8 이전 : 클래스형 컴포넌트</h3>
+            <div class="fragment fade-in-then-semi-out">
+              <div>
+                <ul>
+                  <li>함수형 컴포넌트가 존재하기는 했지만</li>
+                  <p>상태를 가질 수 없었다.</p>
+                </ul>
+              </div>
+            </div>
+            <p class="fragment fade-left">=> React Hooks</p>
+            <p class="fragment fade-left">=> Fiber Node가 관리</p>
           </section>
         </section>
 
         <section>
           <section>
             <h2>2. React Fiber란?</h2>
-            <p class="fragment fade-in">두 가지 개념</p>
-            <ol>
-              <li class="fragment fade-in">Fiber Architecture</li>
-              <li class="fragment fade-in">Fiber Node</li>
-            </ol>
+            <p class="fragment fade-in">두 가지 역할</p>
+
+            <div>
+              <p class="fragment fade-in">1. Fiber Architecture</p>
+              <p class="fragment fade-in">: Fiber 재조정자</p>
+            </div>
+
+            <div>
+              <p class="fragment fade-in">2. Fiber Node</p>
+              <p class="fragment fade-in">
+                : 훅 등 컴포넌트의 모든 상태를 관리
+              </p>
+            </div>
           </section>
 
           <section>
-            <h3>1) Fiber Architecture</h3>
-            <p class="fragment fade-in">: 새로운 재조정 엔진</p>
-            <ol>
-              <li class="fragment fade-in">
-                각 작업을 작은 단위로 나누어 렌더링
-              </li>
-              <li class="fragment fade-in">중단 가능한 작업</li>
-              <li class="fragment fade-in">각 작업에 우선순위 지정</li>
-              <p class="fragment fade-in">=> 동시성 모드 지원</p>
-            </ol>
+            <h3>2.1. Fiber Architecture(Fiber 재조정자)</h3>
+            <p class="fragment fade-in">: React16에서 등장한 재조정 엔진</p>
+            <ul>
+              <li class="fragment fade-in">각 렌더링 작업을 잘게 나누어</li>
+              <p class="fragment fade-in">
+                우선순위가 더 높은 작업을 먼저 처리
+              </p>
+              <p class="fragment fade-in">=> 리액트 동시성</p>
+            </ul>
           </section>
 
           <section>
-            <h3>2) Fiber Node</h3>
+            <h3>2.2. Fiber Node</h3>
             <p class="fragment fade-in">
-              : 컴포넌트의 데이터를 저장하는 자바스크립트 객체
+              : 컴포넌트의 모든 상태를 저장하는 자바스크립트 객체
             </p>
-            <ol>
+            <ul>
               <li class="fragment fade-in">
-                컴포넌트의 타입, 상태, DOM 참조 등의 정보를 포함
+                훅, props, ref 등 컴포넌트의 모든 상태를 저장
               </li>
-            </ol>
-            <p class="fragment fade-in">=> 함수형 컴포넌트에서 훅 지원</p>
+            </ul>
           </section>
         </section>
 
         <section>
           <section>
-            <h2>3. React Fiber의 <br />내부 구조</h2>
+            <h2>3. React Fiber의 <br />주요 속성</h2>
           </section>
           <section>
             <a
@@ -167,7 +195,7 @@
               >react/packages/react-reconciler/ReactFiber.js</a
             >
             <pre style="height: 680px; font-size: 16px">
-							<code data-trim data-noescape class="language-javascript" data-line-numbers="|1-7,33|1,9-15|1,9,17-22|1,24-32,33|1,19,33|1,19,20,33">
+							<code data-trim data-noescape class="language-typescript" data-line-numbers="|1-7,33|1,9-15|1,9,17-22|1,24-32,33|1,19,33|1,19,20,33">
 export type Fiber = {
   // Instance
   tag: WorkTag;
@@ -194,14 +222,14 @@ export type Fiber = {
   // Effects
   flags: Flags;
   subtreeFlags: Flags;
-  deletions: Array<Fiber> | null;
+  deletions: Array | null;
 
   lanes: Lanes;
   childLanes: Lanes;
 
   alternate: Fiber | null;
 };
-								</code>
+</code>
 							</pre>
           </section>
 
@@ -209,7 +237,7 @@ export type Fiber = {
             <h2>3.1. updateQueue</h2>
 
             <div class="fragment fade-in-then-semi-out">
-              의문 1) setState를 호출했는데 <b>왜</b> 상태에 바로 반영이<br />
+              Q1) setState를 호출했는데 <b>왜</b> 상태에 바로 반영이<br />
               바로 안되지?
               <pre>
                 <code data-trim class="language-typescript">
@@ -220,7 +248,7 @@ export type Fiber = {
                     console.log(count); // 0
                     setCount(count+1); 
                     console.log(count); // 0
-                  }
+                  } 
                 </code>
               </pre>
             </div>
@@ -228,12 +256,13 @@ export type Fiber = {
             <p class="fragment fade-in">: 상태 업데이트를 관리하는 큐</p>
             <ul>
               <li class="fragment fade-in">
-                setState를 updateQueue에 추가하고, <br />렌더링 주기가 끝날 때
-                업데이트를 한 번에 처리
+                setState를 실행하면 updateQueue에 추가하고, <br />렌더링 주기가
+                끝날 때 업데이트를 한 번에 처리
               </li>
               <a
                 class="fragment fade-in"
                 href="https://ko.react.dev/learn/queueing-a-series-of-state-updates"
+                target="_blank"
                 >=> 리액트의 Batch 업데이트</a
               >
             </ul>
@@ -243,18 +272,17 @@ export type Fiber = {
             <h2>3.2. memoizedState</h2>
 
             <div class="fragment fade-in-then-semi-out">
-              의문 2) 훅을 if문이나 함수 안에서 <b>왜</b> 호출하면 안되지?
+              Q2) 훅을 if문이나 함수 안에서 <b>왜</b> 호출하면 안되지?
               <pre>
                 <code data-trim class="language-typescript" data-line-numbers="">
                   if(condition){
-                    const [state,setState] = useState(0);
+                    const [state,setState] = useState(0); 
+                    // [Error]
+                    // React has detected a change in the order of Hooks called.
+                    // This will lead to bugs and errors if not fixed.
                   }
                 </code>
               </pre>
-            </div>
-            <div class="fragment fade-in-then-semi-out">
-              의문 3) props로 전달한 값이나 상태값은<br />
-              <b>어디서</b> 관리를 하는 걸까?
             </div>
           </section>
 
@@ -293,37 +321,128 @@ export type Fiber = {
           <section>
             <h2>2) memoizedState</h2>
             <ul>
-              <li class="fragment fade-in">리액트의 상태와 훅을 저장</li>
+              <li class="fragment fade-in">리액트의 훅을 저장</li>
               <p class="fragment fade-in">
                 => 함수형 컴포넌트가 리렌더링해도 훅의 이전 상태를 기억
               </p>
               <li class="fragment fade-in">연결 리스트 형태로 저장</li>
               <p class="fragment fade-in">
-                => 훅을 if문이나 함수 안에서 왜 호출하면 안된다.
+                => 훅을 if문이나 함수 안에서 호출하면 안된다.
               </p>
             </ul>
           </section>
 
           <section>
             <h2>3.3. 그 외</h2>
-            <ul>
+            <ol>
               <li class="fragment fade-in">
                 <b>lanes</b> : 작업 우선순위를 관리
-                <p>=> 동시성 모드</p>
+                <a
+                  href="https://ko.react.dev/blog/2022/03/29/react-v18#what-is-concurrent-react"
+                  target="_blank"
+                  >=> 동시성 모드</a
+                >
+                <ul class="fragment fade-in">
+                  <li>Transition API</li>
+                  <li>Suspense</li>
+                </ul>
               </li>
               <li class="fragment fade-in">
-                <b>alternate</b> : 현재 트리와 작업 중인 트리<br/> 사이의 연결을 관리
-                <p>=> 재조정</p>
+                <b>alternate</b> : 현재 트리와 작업 중인 트리<br />
+                사이의 연결을 관리
+                <ul class="fragment fade-in">
+                  <li>재조정</li>
+                  <li>가상돔</li>
+                </ul>
               </li>
               <li class="fragment fade-in">
-                <b>memoizedProps / pendingProps</b> 
+                <b>memoizedProps / pendingProps</b>
                 <p>: 컴포넌트의 props를 관리</p>
               </li>
-            </ul>
+            </ol>
           </section>
         </section>
 
-        <section>감사합니다.</section>
+        <section>
+          <h4>
+            Q) 그래 피터, React Fiber가 리액트의 내부 구조인 건 알겠어.
+            <br />이게 내가 개발하는데 도움이 될까?
+          </h4>
+          <ol>
+            <li class="fragment fade-in">
+              프론트엔드 개발의 전체적인 그림을 그리기 위해서
+              <p class="fragment fade-in">
+                "고수준의 프로그래밍을 하기 위해서는 저수준의 영역을 차지하고
+                있는 계층을 이해하고 고수준의 사고를 기반으로 프로그래밍을 할 수
+                있어야 합니다."
+                <br />
+                <a
+                  href="https://velog.io/@teo/gradation-thinking#%EA%B7%B8%EB%9D%BC%EB%8D%B0%EC%9D%B4%EC%85%98-%EC%A7%80%EB%8F%84---%EC%BD%94%EB%93%9C%EC%9D%98-%EC%97%AD%ED%95%A0%EA%B3%BC-%EC%B6%94%EC%83%81%ED%99%94-%EC%88%98%EC%A4%80"
+                  target="_blank"
+                  >- 테오의 잘하는 개발자가 되는 그라데이션 사고법</a
+                >
+                중
+              </p>
+            </li>
+            <li class="fragment fade-in">
+              리액트의 핵심 기술(RSC, Suspense, 동시성)을 빠르고 쉽게 이해하기
+              위해서
+            </li>
+          </ol>
+          <ul>
+            <li class="fragment fade-in">
+              하지만 개발을 하는데 필요한 지식을 학습하는 것이 우선
+            </li>
+            <li class="fragment fade-in">
+              '리액트 내부에는 이런게 있구나', 그리고
+              <br />'리액트 파이버는 이런 개념과 관련이 있구나' 정도로만
+              이해만으로 충분
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <p class="r-fit-text">감사합니다🙇‍♂️</p>
+        </section>
+
+        <section>
+          <h2>참고자료</h2>
+          <ul>
+            <li>
+              <a
+                href="https://github.com/acdlite/react-fiber-architecture"
+                target="_blank"
+                >React Fiber Architecture</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.youtube.com/watch?v=JadWu4Ygnyc&list=PLpq56DBY9U2B6gAZIbiIami_cLBhpHYCA"
+                target="_blank"
+                >가장 쉬운 웹개발 - React 패키지 까보기</a
+              >
+            </li>
+            <li>
+              <a href="https://goidle.github.io/" target="_blank"
+                >Deep Dive Magic Code - React 톺아보기</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://github.com/facebook/react/blob/main/packages/react-reconciler/src/ReactFiber.js"
+                target="_blank"
+                >react/packages/react-reconciler/ReactFiber.js</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://ko.react.dev/blog/2022/03/29/react-v18"
+                target="_blank"
+                >React v18.0</a
+              >
+            </li>
+          </ul>
+        </section>
       </div>
     </div>
 
