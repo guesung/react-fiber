@@ -31,72 +31,113 @@
           <h4>우아한테크코스 7기 피터</h4>
         </section>
 
-        <section class="r-stack">
-          <h3 style="margin-top: -40px">
-            리액트를 사용하며 <br />
-            이런 궁금증 가져보신 적 있으신가요?
-          </h3>
-          <div>
-            <p class="fragment fade-in">
-              Q1) setState를 실행했는데 상태값이 <b>왜</b> 바로 바뀌지 않지?
-            </p>
-            <pre class="fragment fade-in">
-              <code data-trim class="language-typescript small" data-line-numbers="">
-                const [count,setCount] = useState(0);
-                
-                const handleClick = () => {
-                  setCount(count+1); 
-                  console.log(count); // 0
-                  setCount(count+1); 
-                  console.log(count); //  0
+        <section>
+          <section data-auto-animate>
+            <h3 style="margin-top: -40px" data-id="question">
+              리액트를 사용하며 <br />
+              이런 궁금증 가져보신 적 있으신가요?
+            </h3>
+            <div>
+              <p class="fragment fade-in">
+                Q1) setState를 실행했는데 상태값이 <b>왜</b> 바로 바뀌지 않지?
+              </p>
+              <pre class="fragment fade-in">
+              <code data-trim class="language-typescript" data-line-numbers="|1,2,10|1,4-9,10">
+                function App(){
+                  const [count,setCount] = useState(0);
+                  
+                  const handleClick = () => {
+                    setCount(5); 
+                    console.log(count); // 0
+
+                    setCount(10); 
+                    console.log(count); // 0
+                  }
                 }
               </code>
             </pre>
-          </div>
-          <div>
-            <p class="fragment fade-in">
-              Q2) 훅을 if문이나 함수 안에서 호출하면 <b>왜</b> 안되지?
-            </p>
-            <pre class="fragment fade-in"> 
-                <code data-trim class="language-typescript small" data-line-numbers="">
-                  if(condition){
-                    const [state,setState] = useState(0); 
-                    // [Error]
-                    // React has detected a change in the order of Hooks called.
-                    // This will lead to bugs and errors if not fixed.
+            </div>
+          </section>
+
+          <section data-auto-animate>
+            <h3 style="margin-top: -40px" data-id="question">
+              리액트를 사용하며 <br />
+              이런 궁금증 가져보신 적 있으신가요?
+            </h3>
+            <div>
+              <p class="fragment fade-in">
+                Q2) 훅을 if문이나 함수 안에서 호출하면 <b>왜</b> 안되지?
+              </p>
+              <pre class="fragment fade-in"> 
+                <code data-trim class="language-typescript small" data-line-numbers="|1,2,7,8|1,2,3,7,8|">
+                  function App(){
+                    if(condition){
+                      const [state,setState] = useState(0); 
+                      // [Error]
+                      // React has detected a change in the order of Hooks called.
+                      // This will lead to bugs and errors if not fixed.
+                      // 리액트가 훅 순서의 변경을 감지했습니다.
+                      // 이는 버그와 오류를 발생시킬 수 있습니다.
+                    }
                   }
                 </code>
               </pre>
-          </div>
-          <div>
-            <p class="fragment fade-left">=> React Fiber</p>
-          </div>
-        </section>
+            </div>
+          </section>
+          <section data-auto-animate>
+            <h3 style="margin-top: -40px" data-id="question">
+              리액트를 사용하며 <br />
+              이런 궁금증 가져보신 적 있으신가요?
+            </h3>
+            <div>
+              <p>
+                Q1) setState를 실행했는데 상태값이 <b>왜</b> 바로 바뀌지 않지?
+              </p>
+              <p>Q2) 훅을 if문이나 함수 안에서 호출하면 <b>왜</b> 안되지?</p>
+              <p class="fragment fade-left">=> React Fiber</p>
+            </div>
+          </section>
 
-        <section>
-          <h2>이번 시간의 목표</h2>
-          <ol>
-            <li class="fragment fade-in">
-              앞선 궁금증에 대한 답을 찾아보자.
-              <div class="fragment fade-in-then-semi-out">
-                <p>
-                  Q1) setState를 실행하면 상태값이 <b>왜</b> 바로 바뀌지 않지?
-                </p>
-                <p>Q2) 훅을 if문이나 함수 안에서 호출하면 <b>왜</b> 안되지?</p>
-              </div>
-            </li>
+          <section>
+            <h2>이번 시간의 목표</h2>
+            <ol>
+              <li class="fragment fade-in">
+                앞선 궁금증에 대한 답을 찾아보자.
+                <div class="fragment fade-in-then-semi-out">
+                  <p>
+                    Q1) setState를 실행하면 상태값이 <b>왜</b> 바로 바뀌지 않지?
+                  </p>
+                  <p>
+                    Q2) 훅을 if문이나 함수 안에서 호출하면 <b>왜</b> 안되지?
+                  </p>
+                </div>
+              </li>
 
-            <li class="fragment fade-in">
-              '리액트 파이버란 ____이다.'에 대한 답을 내려보자.
-            </li>
-          </ol>
+              <li class="fragment fade-in">
+                '리액트 파이버란 ____이다.'에 대한 답을 내려보자.
+              </li>
+            </ol>
+          </section>
         </section>
 
         <section>
           <h2>목차</h2>
           <ol>
-            <li class="fragment fade-left">React Fiber의 두 가지 역할</li>
-            <li class="fragment fade-left">React Fiber의 주요 속성</li>
+            <li class="fragment fade-left">
+              React Fiber의 두 가지 역할
+              <ol class="fragment fade-in">
+                <li>Fiber 재조정자</li>
+                <li>Fiber Node</li>
+              </ol>
+            </li>
+            <li class="fragment fade-left">
+              React Fiber의 주요 속성
+              <ol class="fragment fade-in">
+                <li>updateQueue</li>
+                <li>memoizedState</li>
+                <li>그 외 속성</li>
+              </ol>
+            </li>
             <li class="fragment fade-left">마무리</li>
           </ol>
         </section>
@@ -113,11 +154,16 @@
           </section>
 
           <section data-auto-animate>
-            <h2 data-id="sub-title">1) Fiber 재조정자</h2>
+            <h2 data-id="sub-title">
+              1) Fiber <span class="highlight-red fragment">재조정</span>자
+            </h2>
             <h3 class="fragment fade-in">재조정</h3>
             <p class="fragment fade-in">
-              : 렌더링 이전과 이후의 가상 돔을 비교하여 <br />
-              변경사항을 실제 돔에 적용하는 작업
+              : 렌더링 이전과 이후의 가상 돔을
+              <span class="highlight-red fragment">비교</span>하여<br />
+              <span class="highlight-red fragment"
+                >변경사항을 실제 돔에 적용</span
+              >하는 작업
             </p>
           </section>
 
@@ -131,8 +177,11 @@
             </div>
             <p class="fragment fade-in">단점</p>
             <ol>
-              <li class="fragment fade-in">중간에 작업을 중단할 수 없다.</li>
-              <li class="fragment fade-in">작업 순서를 변경할 수 없다.</li>
+              <li class="fragment fade-in">
+                렌더링 블로킹
+                <p>:렌더링이 완료될 때까지 다른 작업을 수행할 수 없는 상태</p>
+              </li>
+              <li class="fragment fade-in">우선순위 처리 및 작업 중단 불가</li>
             </ol>
             <p class="fragment fade-left">=> Fiber 재조정자</p>
           </section>
@@ -145,7 +194,7 @@
               <p class="fragment fade-in">
                 우선순위가 더 높은 작업을 먼저 처리
               </p>
-              <p class="fragment fade-in">=> 리액트 동시성</p>
+              <!-- <p class="fragment fade-in">=> 리액트 동시성</p> -->
             </ul>
           </section>
 
@@ -203,7 +252,7 @@
               >react/packages/react-reconciler/ReactFiber.js</a
             >
             <pre style="height: 680px; font-size: 16px">
-							<code data-trim data-noescape class="language-typescript" data-line-numbers="|1-7,33|1,9-15|1,9,17-22|1,24-32,33|1,19,33|1,19,20,33">
+							<code data-trim data-noescape class="language-typescript" data-line-numbers="|1-7,33|1,9-15|1,9,17-22|1,24-27,33|1,24,29-30,33|1,24,32,33|1,19,33|1,19,20,33">
 export type Fiber = {
   // Instance
   tag: WorkTag;
@@ -290,7 +339,7 @@ export type Fiber = {
               Q1) setState를 호출했는데
               <b>왜</b> 상태에 바로 반영이<br />
               바로 안되지?
-              <pre>
+              <pre class="fragment fade-in">
                 <code data-trim class="language-typescript">
                   const [count,setCount] = useCount(0);
                   
@@ -303,16 +352,10 @@ export type Fiber = {
                 </code>
               </pre>
             </div>
-
-            <div data-id="explanation">
-              <p>: 상태 업데이트를 관리하는 큐</p>
-              <ul>
-                <li>
-                  setState를 실행하면 updateQueue에 추가하고, <br />렌더링
-                  주기가 끝날 때 업데이트를 한 번에 처리
-                </li>
-              </ul>
-            </div>
+            <p class="fragment fade-in">
+              A1) Fiber의 updateQueue에 상태 업데이트가 쌓이고 <br />렌더링
+              주기가 끝날 때 일괄 처리되기 때문
+            </p>
           </section>
 
           <section data-auto-animate>
@@ -334,7 +377,7 @@ export type Fiber = {
           </section>
 
           <section data-auto-animate>
-            <h2 data-id="title-memoizedState">3.2. memoizedState</h2>
+            <h2 data-id="title-memoizedState">2) memoizedState</h2>
 
             <pre class="fragment fade-in">
               <code class="language-javascript small" data-trim data-line-numbers="|1,2,3,9|1,5-7,9|">
@@ -366,7 +409,7 @@ export type Fiber = {
           </section>
 
           <section data-auto-animate>
-            <h2 data-id="title-memoizedState">3.2. memoizedState</h2>
+            <h2 data-id="title-memoizedState">2) memoizedState</h2>
             <ul>
               <li class="fragment fade-in">리액트의 훅을 저장</li>
               <p class="fragment fade-in">
@@ -379,8 +422,32 @@ export type Fiber = {
             </ul>
           </section>
 
+          <section data-auto-animate>
+            <h2 data-id="title-memoizedState">2) memoizedState</h2>
+
+            <div class="fragment fade-in">
+              Q2) 훅을 if문이나 함수 안에서 <b>왜</b> 호출하면 안되지?
+              <pre>
+                <code data-trim class="language-typescript small" data-line-numbers="" >
+                  if(condition){
+                    const [state,setState] = useState(0); 
+                    // [Error]
+                    // React has detected a change in the order of Hooks called.
+                    // This will lead to bugs and errors if not fixed.
+                  }
+                </code>
+              </pre>
+            </div>
+
+            <p class="fragment fade-in">
+              A2) 훅은 Fiber의 memoizedState에 연결 리스트 형태로<br />
+              저장되어, 순서가 바뀌면 이전 상태와 매칭이<br />
+              불가능해지기 때문
+            </p>
+          </section>
+
           <section>
-            <h2>3.3. Fiber의 그 외 속성</h2>
+            <h2>3) Fiber의 그 외 속성</h2>
             <ol>
               <li class="fragment fade-in">
                 <b>lanes</b> : 작업 우선순위를 관리
@@ -412,76 +479,70 @@ export type Fiber = {
 
         <section>
           <section>
-            <h2>4. 마무리</h2>
+            <h1>3. 마무리</h1>
           </section>
-          <section>
-            <h4 style="margin-top: -60px">
+          <section data-auto-animate>
+            <h4 style="margin-top: -60px" data-id="question">
               그래 피터, React Fiber가 리액트의 내부 구조인 건 알겠어
-              <br />이게 내가 개발하는데 도움이 될까?
+              <br />근데 이게 내가 개발하는데 정말 도움이 될까?
             </h4>
             <ol>
               <li class="fragment fade-in">
-                프론트엔드 개발의 전체적인 그림을 그리기 위해서
-                <p class="fragment fade-in">
-                  "고수준의 프로그래밍을 하기 위해서는 저수준의 영역을 차지하고
-                  있는 계층을 이해하고, 고수준의 사고를 기반으로 프로그래밍을 할
-                  수 있어야 합니다."
-                  <br />
-                  <a
-                    href="https://velog.io/@teo/gradation-thinking#%EA%B7%B8%EB%9D%BC%EB%8D%B0%EC%9D%B4%EC%85%98-%EC%A7%80%EB%8F%84---%EC%BD%94%EB%93%9C%EC%9D%98-%EC%97%AD%ED%95%A0%EA%B3%BC-%EC%B6%94%EC%83%81%ED%99%94-%EC%88%98%EC%A4%80"
-                    target="_blank"
-                    >- 테오의 잘하는 개발자가 되는 그라데이션 사고법</a
-                  >
-                  중
-                </p>
+                리액트의 핵심 기술을 빠르고 쉽게 배우기 위해서
+                <ul>
+                  <li class="fragment fade-in">
+                    CS지식이 개발자에게 필요한 이유와 비슷한 맥락
+                  </li>
+                  <li class="fragment fade-in">
+                    리액트의 핵심 기술 : 훅, 동시성과 Transitions, Suspense,
+                    React Server Component 등
+                  </li>
+                </ul>
               </li>
               <li class="fragment fade-in">
-                리액트의 핵심 기술(React Server Component, Suspense, 동시성)을
-                쉽고 정확하게 이해하기 위해서
-                <hr />
+                면접 준비를 위해서
+                <ul>
+                  <li class="fragment fade-in">프론트엔드 개발자 면접 질문</li>
+                  <p class="fragment fade-in">
+                    가상돔, 컴포넌트 라이프 사이클, 재조정, 동시성
+                  </p>
+                  <p class="fragment fade-in">
+                    이러한 질문에 대한 답변을 잘하기 위해서 리액트 파이버같은
+                    내부 구조가 빠질 수 없다.
+                  </p>
+                </ul>
               </li>
             </ol>
+          </section>
 
+          <section data-auto-animate>
+            <h4 style="margin-top: -60px" data-id="question">
+              그래 피터, React Fiber가 리액트의 내부 구조인 건 알겠어
+              <br />근데 이게 내가 개발하는데 정말 도움이 될까?
+            </h4>
             <ul>
               <li class="fragment fade-in">
                 개발을 하는데 필요한 실용적 지식을 학습하는 것이 우선
               </li>
               <li class="fragment fade-in">
-                지금은 '리액트 내부는 대략 이런 식으로 동작하는구나', '내가 알고
-                있던 것들이 파이버와 관련이 있었구나' 정도의 이해만으로도 충분
+                이번 시간에는 '리액트 내부는 대략 이런 식으로 동작하는구나',
+                '내가 알고 있던 것들이 파이버와 관련이 있었구나' 정도의
+                이해만으로도 충분
               </li>
             </ul>
           </section>
 
           <section data-auto-animate>
-            <h2 data-id="title-정리">정리</h2>
+            <h2 data-id="title">요약</h2>
 
-            <div>
-              <p class="fragment fade-in">
-                Q1) setState를 실행하면 상태값이 <b>왜</b> 바로 바뀌지 않지?
-              </p>
-              <p class="fragment fade-in">
-                : Fiber의 updateQueue에 상태 업데이트가 쌓이고 <br />렌더링
-                주기가 끝날 때 일괄 처리되기 때문
-              </p>
-
-              <p class="fragment fade-in">
-                Q2) 훅을 if문이나 함수 안에서 호출하면 <b>왜</b> 안되지?
-              </p>
-              <p class="fragment fade-in">
-                : 훅은 Fiber의 memoizedState에 연결 리스트 형태로 저장<br />되어,
-                순서가 바뀌면 이전 상태와 매칭이 불가능해지기 때문
-              </p>
-            </div>
-          </section>
-
-          <section data-auto-animate>
-            <h2 data-id="title-정리">정리</h2>
-
-            <p>
-              "리액트 파이버란 리액트의 재조정 엔진(Fiber Architecture)이자
-              컴포넌트의 모든 상태를 관리하는 자바스크립트 객체(Fiber
-              Node)이다."
+            <p class="fragment fade-up">
+              "리액트 파이버란
+              <span class="highlight-red fragment">리액트의 재조정 엔진</span
+              >이자<br />
+              <span class="highlight-red fragment"
+                >컴포넌트의 모든 상태를 관리</span
+              >하는 <br />
+              자바스크립트 객체이다."
             </p>
           </section>
         </section>
