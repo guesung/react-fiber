@@ -69,7 +69,7 @@
                 Q2) 훅을 if문이나 함수 안에서 호출하면 <b>왜</b> 안되지?
               </p>
               <pre class="fragment fade-in"> 
-                <code data-trim class="language-typescript small" data-line-numbers="|1,2,7,8|1,2,3,7,8|">
+                <code data-trim class="language-typescript small" data-line-numbers="|1,2,9,10|1,2,3,9,10|">
                   function App(){
                     if(condition){
                       const [state,setState] = useState(0); 
@@ -165,6 +165,10 @@
                 >변경사항을 실제 돔에 적용</span
               >하는 작업
             </p>
+            <p class="fragment fade-in">
+              렌더링 :<br />
+              함수(함수형 컴포넌트)가 호출되어 <br />가상돔이 만들어지는 과정
+            </p>
           </section>
 
           <section data-auto-animate>
@@ -179,9 +183,11 @@
             <ol>
               <li class="fragment fade-in">
                 렌더링 블로킹
-                <p>:렌더링이 완료될 때까지 다른 작업을 수행할 수 없는 상태</p>
+                <p>
+                  : 처리 중이던 렌더링이 완료될 때까지 <br />
+                  다른 작업을 수행할 수 없는 상태
+                </p>
               </li>
-              <li class="fragment fade-in">우선순위 처리 및 작업 중단 불가</li>
             </ol>
             <p class="fragment fade-left">=> Fiber 재조정자</p>
           </section>
@@ -248,8 +254,8 @@
             <div class="fragment fade-in-then-semi-out">
               <h4>1) 컴포넌트의 유형과 ID를 정의하는 속성들</h4>
 
-              <pre>
-                <code data-trim data-noescape class="language-typescript" data-line-numbers="" style="width: 1000px;">
+              <pre style="width: 1000px">
+                <code data-trim data-noescape class="language-typescript" data-line-numbers="" >
                 export type Fiber = {
                   tag: WorkTag;       // 컴포넌트 유형 (함수형, 클래스형, 호스트 등)
                   key: null | string; // React 엘리먼트의 고유 식별자 (주로 리스트에서 사용)
@@ -266,8 +272,8 @@
 
             <div class="fragment fade-in-then-semi-out">
               <h4>2) Fiber 노드 간의 관계를 정의하는 속성들</h4>
-              <pre>
-                <code data-trim data-noescape class="language-typescript" data-line-numbers="" style="width: 1000px;">
+              <pre style="width: 1000px">
+                <code data-trim data-noescape class="language-typescript" data-line-numbers="" >
                   export type Fiber = {
                     return: Fiber | null;  // 부모 Fiber (이 Fiber를 렌더링한 컴포넌트)
                     child: Fiber | null;   // 첫 번째 자식 Fiber
@@ -283,8 +289,8 @@
           <section>
             <div class="fragment fade-in-then-semi-out">
               <h4>3) React ref 관련 속성들</h4>
-              <pre>
-                  <code data-trim data-noescape class="language-typescript" data-line-numbers="" style="width: 1000px;">
+              <pre style="width: 1000px">
+                <code data-trim data-noescape class="language-typescript" data-line-numbers="" >
                   export type Fiber = {
                     ref: RefObject;                     // ref 객체 또는 함수
                     refCleanup: null | (() => void);    // ref 정리를 위한 콜백 함수
@@ -297,8 +303,8 @@
             <div class="fragment fade-in-then-semi-out">
               <h4>4) 컴포넌트의 데이터와 상태를 관리하는 속성들</h4>
 
-              <pre>
-              <code data-trim data-noescape class="language-typescript" data-line-numbers="" style="width: 1000px;">
+              <pre style="width: 1000px">
+                <code data-trim data-noescape class="language-typescript" data-line-numbers="" >
                 export type Fiber = {
                   pendingProps: any;       // 아직 처리되지 않은 새 props
                   memoizedProps: any;      // 마지막으로 렌더링된 props
@@ -318,8 +324,8 @@
             <div class="fragment fade-in-then-semi-out">
               <h4>5) 업데이트와 사이드 이펙트를 추적하는 속성들</h4>
 
-              <pre>
-      <code data-trim data-noescape class="language-typescript" data-line-numbers="" style="width: 1000px;">
+              <pre style="width: 1000px">
+                <code data-trim data-noescape class="language-typescript" data-line-numbers="" >
               export type Fiber = {
                 flags: Flags;            // 이 Fiber에 적용할 작업 종류
                                          // (배치, 업데이트, 삭제 등)
@@ -334,20 +340,20 @@
             <div class="fragment fade-in-then-semi-out">
               <h4>6) 우선순위와 스케줄링 정보를 담는 속성들</h4>
 
-              <pre>
-              <code data-trim data-noescape class="language-typescript" data-line-numbers="" style="width: 1000px;">
-                export type Fiber = {
-                  lanes: Lanes;       // 이 Fiber의 작업 우선순위
-                  childLanes: Lanes;  // 자식 Fiber들의 작업 우선순위
-                  // ..
-                };
+              <pre style="width: 1000px">
+                <code data-trim data-noescape class="language-typescript" data-line-numbers="" >
+                  export type Fiber = {
+                    lanes: Lanes;       // 이 Fiber의 작업 우선순위
+                    childLanes: Lanes;  // 자식 Fiber들의 작업 우선순위
+                    // ..
+                  };
               </code>
             </pre>
             </div>
             <div class="fragment fade-in-then-semi-out">
               <h4>7) 진행 중인 작업과 커밋된 작업 사이의 관계</h4>
-              <pre>
-              <code data-trim data-noescape class="language-typescript" data-line-numbers="" style="width: 1000px;">
+              <pre style="width: 1000px">
+              <code data-trim data-noescape class="language-typescript" data-line-numbers="" >
                 export type Fiber = {
                   // ..
                   alternate: Fiber | null; // 현재 트리와 작업 중인 트리 사이의 대응 Fiber
